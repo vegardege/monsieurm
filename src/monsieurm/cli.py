@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 import typer
 from rich import print
 
-from fkllm.quiz import get_quiz
+from monsieurm.quiz import get_quiz
 
 app = typer.Typer()
 
