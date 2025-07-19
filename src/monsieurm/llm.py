@@ -16,11 +16,18 @@ class LLMException(Exception):
 def answer_question(question: str, api_key: str) -> str:
     """Ask a quiz question to the LLM and get a response.
 
+    Temperature set to 0.0 to ensure deterministic answers with no
+    creativity.
+
     Args:
         question (str): Question from the quiz.
         api_key (str): Bearer token provided by Mistral after signup.
     """
-    return _chat_completion(QUESTION_PROMPT.format(question=question), api_key)
+    return _chat_completion(
+        QUESTION_PROMPT.format(question=question),
+        api_key,
+        temperature=0.0,
+    )
 
 
 def reaction_from_score(score: int, api_key: str) -> str:
@@ -30,15 +37,27 @@ def reaction_from_score(score: int, api_key: str) -> str:
         question (str): Question from the quiz.
         api_key (str): Bearer token provided by Mistral after signup.
     """
-    return _chat_completion(REACTION_PROMPT.format(score=score), api_key)
+    return _chat_completion(
+        REACTION_PROMPT.format(score=score),
+        api_key,
+        temperature=1.0,
+    )
 
 
-def _chat_completion(prompt: str, api_key: str, sleep: Optional[float] = 1.0) -> str:
+def _chat_completion(
+    prompt: str,
+    api_key: str,
+    temperature: float,
+    sleep: Optional[float] = 1.0,
+) -> str:
     """Simple wrapper around Mistral's chat completion API.
 
     This function assumes a simple prompt from the user, and a single response
     from the assistant. Expand if more advanced functionality (e.g. tools) is
     needed. Switch to the SDK if needs become more advanced.
+
+    Note that we're setting a fixed random seed. This allows us to reproduce a
+    run and see what it answered if we're curious.
     """
     url = f"{ROOT_URL}/v1/chat/completions"
     headers = {
@@ -47,6 +66,8 @@ def _chat_completion(prompt: str, api_key: str, sleep: Optional[float] = 1.0) ->
     }
     json = {
         "model": "mistral-medium-latest",
+        "temperature": temperature,
+        "random_seed": 0,
         "messages": [
             {
                 "role": "user",
