@@ -8,13 +8,13 @@ from pydantic import BaseModel
 class Question(BaseModel):
     question: str
     answer: str
-    aliases: list[str]
+    aliases: list[str] = []
 
 
 class Quiz(BaseModel):
     theme: str
-    announcement: str
-    questions: list[Question]
+    announcement: Optional[str] = None
+    questions: list[Question] = []
 
 
 def get_quiz(quiz_date: date = date.today()) -> Optional[Quiz]:
@@ -48,3 +48,21 @@ def get_quiz(quiz_date: date = date.today()) -> Optional[Quiz]:
     res.raise_for_status()
 
     return Quiz(**res.json())
+
+
+def is_correct(question: Question, answer: str) -> bool:
+    """Check if the answer to a question is correct.
+
+    Args:
+        question (Question): The question object we are evaluating, including
+            answers and answer aliases. This should come straight from the
+            `get_quiz` function.
+        answer (str): The suggested answer.
+
+    Returns:
+        `True` if the answer is evaluated as correct, `False` otherwise.
+    """
+    valid_answers = [a.lower().strip() for a in [question.answer] + question.aliases]
+    answer = answer.lower().strip()
+
+    return answer in valid_answers

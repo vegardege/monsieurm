@@ -6,7 +6,7 @@ import typer
 from rich import print
 
 from monsieurm.llm import answer_question
-from monsieurm.quiz import get_quiz
+from monsieurm.quiz import get_quiz, is_correct
 
 app = typer.Typer()
 
@@ -15,16 +15,28 @@ app = typer.Typer()
 def display(
     date_string: Annotated[str, typer.Argument()] = date.today().strftime("%Y-%m-%d"),
 ) -> None:
-    """Display the quiz for a specific date"""
+    """Display the quiz for a specific date with LLM answers.
+
+    Warning: Calling this endpoint will give you spoilers.
+    """
     api_key = _load_api_key()
     quiz_date = _parse_quiz_date(date_string)
 
     if quiz := get_quiz(quiz_date):
-        print(quiz.theme)
-        print(quiz.announcement)
+        print(f"❓ {quiz.theme}")
+
+        if quiz.announcement:
+            print(f"❗ {quiz.announcement}")
+
         for ix, q in enumerate(quiz.questions, start=1):
-            print(f"{ix}. {q.question}")
-            print(answer_question(q.question, api_key))
+            question = q.question
+            answer = answer_question(question, api_key)
+            correct = is_correct(q, answer)
+            emoji = "🟩" if correct else "🟥"
+
+            print()
+            print(f"{ix}. {question}")
+            print(f"{emoji} {answer}")
     else:
         print(f"No quiz published on {quiz_date.strftime('%Y-%m-%d')}")
 
