@@ -5,10 +5,40 @@ from typing import Annotated, Optional
 import typer
 from rich import print
 
-from monsieurm.llm import answer_question
+from monsieurm.llm import answer_question, reaction_from_score
 from monsieurm.quiz import get_quiz, is_correct
 
 app = typer.Typer()
+
+
+@app.command()
+def solve(
+    date_string: Annotated[str, typer.Argument()] = date.today().strftime("%Y-%m-%d"),
+) -> None:
+    """Solve the quiz and output the results."""
+    api_key = _load_api_key()
+    quiz_date = _parse_quiz_date(date_string)
+
+    score = 0
+    emojis = ""
+
+    if quiz := get_quiz(quiz_date):
+        for q in quiz.questions:
+            question = q.question
+            answer = answer_question(question, api_key)
+
+            if is_correct(q, answer):
+                score += 1
+                emojis += "🟩"
+            else:
+                emojis += "🟥"
+
+        reaction = reaction_from_score(score, api_key)
+        print(reaction)
+        print()
+        print(emojis)
+    else:
+        print(f"No quiz published on {quiz_date.strftime('%Y-%m-%d')}")
 
 
 @app.command()

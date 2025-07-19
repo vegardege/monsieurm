@@ -4,42 +4,41 @@ from typing import Optional
 import requests
 from requests.exceptions import HTTPError
 
+from monsieurm.prompts import QUESTION_PROMPT, REACTION_PROMPT
+
 ROOT_URL = "https://api.mistral.ai"
-
-PROMPT = """Du deltar i en online quiz og skal svare korrekt på dagens spørsmål.
-Viktig: svaret ditt evalueres maskinelt, du må derfor ikke svare noe annet enn
-selve svaret på spørsmålet. All annen tekst vil medføre at du får 0 poeng.
-
-= EKSEMPEL =
-
-Hva er hovedstaden i Tyskland?
-Berlin
-
-Hvem er grunnstoff nummer 107 oppkalt etter?
-Niels Bohr
-
-= DAGENS SPØRSMÅL =
-"""
 
 
 class LLMException(Exception):
     pass
 
 
-def answer_question(question: str, api_key: str, sleep: Optional[float] = 1.0) -> str:
-    """Simple wrapper around Mistral's chat completion API.
-
-    This function assumes a simple question from the user, and a single response
-    from the assistant. Expand if more advanced functionality (e.g. tools) is
-    needed. Switch to the SDK if needs become more advanced.
+def answer_question(question: str, api_key: str) -> str:
+    """Ask a quiz question to the LLM and get a response.
 
     Args:
-        question (str): Question from the user.
+        question (str): Question from the quiz.
         api_key (str): Bearer token provided by Mistral after signup.
-        sleep (float): Seconds to sleep after the request.
+    """
+    return _chat_completion(QUESTION_PROMPT.format(question=question), api_key)
 
-    Returns:
-        Answer from the assistant.
+
+def reaction_from_score(score: int, api_key: str) -> str:
+    """Ask a quiz question to the LLM and get a response.
+
+    Args:
+        question (str): Question from the quiz.
+        api_key (str): Bearer token provided by Mistral after signup.
+    """
+    return _chat_completion(REACTION_PROMPT.format(score=score), api_key)
+
+
+def _chat_completion(prompt: str, api_key: str, sleep: Optional[float] = 1.0) -> str:
+    """Simple wrapper around Mistral's chat completion API.
+
+    This function assumes a simple prompt from the user, and a single response
+    from the assistant. Expand if more advanced functionality (e.g. tools) is
+    needed. Switch to the SDK if needs become more advanced.
     """
     url = f"{ROOT_URL}/v1/chat/completions"
     headers = {
@@ -51,7 +50,7 @@ def answer_question(question: str, api_key: str, sleep: Optional[float] = 1.0) -
         "messages": [
             {
                 "role": "user",
-                "content": PROMPT + question,
+                "content": prompt,
             },
         ],
     }
