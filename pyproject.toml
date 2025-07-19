@@ -6,9 +6,34 @@ authors = ["Vegard Egeland <vegardegeland@gmail.com>"]
 license = "MIT License"
 readme = "README.md"
 
+[tool.poetry.scripts]
+fkllm = "fkllm.cli:app"
+
 [tool.poetry.dependencies]
 python = "^3.10"
+typer = "^0.16.0"
+requests = "^2.32.4"
+pydantic = "^2.11.7"
 
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+mypy = "^1.17.0"
+pytest = "^8.4.1"
+flake8 = "^7.3.0"
+pytest-cov = "^6.2.1"
+
+[[tool.poetry.packages]]
+include = "fkllm"
+from = "src"
+
+[tool.isort]
+profile = "black"
+src_paths = ["src", "tests"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+markers = ["integration: marks tests as integration"]
 
 [build-system]
 requires = ["poetry-core"]
