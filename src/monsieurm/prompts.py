@@ -1,8 +1,9 @@
-QUESTION_PROMPT = """Du deltar i en online quiz og skal svare korrekt på dagens spørsmål.
+QUESTION_PROMPT = """Du deltar i en online quiz og skal svare korrekt på
+dagens spørsmål.
 
-VIKTIG: Svaret evalueres automatisk. Du må derfor **kun svare med selve svaret**
-- uten forklaringer, innledning, høflighetsfraser eller annen tekst. **Alt annet
-enn riktig svartekst gir 0 poeng.**
+VIKTIG: Svaret evalueres automatisk. Du må derfor **kun svare med selve
+svaret** - uten forklaringer, innledning, høflighetsfraser eller annen
+tekst. **Alt annet enn riktig svartekst gir 0 poeng.**
 
 = EKSEMPEL =
 

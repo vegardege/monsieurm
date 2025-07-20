@@ -7,19 +7,27 @@ from rich import print
 from monsieurm.config import load_config
 from monsieurm.llm import answer_question, reaction_from_score
 from monsieurm.quiz import get_quiz, is_correct
-from monsieurm.slack import generate_message, post_message
+from monsieurm.slack import generate_slack_message, post_slack_message
 
 app = typer.Typer()
+
+TODAY = date.today().strftime("%Y-%m-%d")
 
 
 @app.command()
 def solve(
-    date_string: Annotated[str, typer.Argument()] = date.today().strftime("%Y-%m-%d"),
-    post_slack: bool = typer.Option(False, "--post-slack", help="Post result to Slack"),
+    date: Annotated[
+        str,
+        typer.Argument(help="Quiz date (YYYY-MM-DD)"),
+    ] = TODAY,
+    post_slack: Annotated[
+        bool,
+        typer.Option(help="Post result to Slack"),
+    ] = False,
 ) -> None:
-    """Solve the quiz and output the results."""
+    """Solve the quiz for a specific date and post results to Slack."""
     config = load_config()
-    quiz_date = _parse_quiz_date(date_string)
+    quiz_date = _parse_quiz_date(date)
 
     score = 0
     emojis = ""
@@ -36,10 +44,10 @@ def solve(
                 emojis += "🟥"
 
         reaction = reaction_from_score(score, config.mistral_api_key)
-        message = generate_message(quiz.theme, emojis, reaction)
+        message = generate_slack_message(quiz.theme, emojis, reaction)
 
         if post_slack and config.slack_bot_token:
-            post_message(message, config.slack_bot_token)
+            post_slack_message(message, config.slack_bot_token)
         else:
             print(message)
     else:
@@ -48,11 +56,14 @@ def solve(
 
 @app.command()
 def display(
-    date_string: Annotated[str, typer.Argument()] = date.today().strftime("%Y-%m-%d"),
+    date: Annotated[
+        str,
+        typer.Argument(help="Quiz date (YYYY-MM-DD)"),
+    ] = TODAY,
 ) -> None:
     """Display the quiz for a specific date with LLM answers."""
     config = load_config()
-    quiz_date = _parse_quiz_date(date_string)
+    quiz_date = _parse_quiz_date(date)
 
     if quiz := get_quiz(quiz_date):
         print(f"❓ {quiz.theme}")
@@ -86,6 +97,10 @@ def _parse_quiz_date(input: Optional[str]) -> date:
         Current date if no user input, otherwise parsed input.
     """
     try:
-        return datetime.strptime(input, "%Y-%m-%d").date() if input else date.today()
+        return (
+            datetime.strptime(input, "%Y-%m-%d").date()
+            if input
+            else date.today()
+        )
     except ValueError:
         raise typer.BadParameter("Date must be on the format 'YYYY-MM-DD'")

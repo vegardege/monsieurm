@@ -62,7 +62,9 @@ def is_correct(question: Question, answer: str) -> bool:
     Returns:
         `True` if the answer is evaluated as correct, `False` otherwise.
     """
-    valid_answers = [a.lower().strip() for a in [question.answer] + question.aliases]
+    valid_answers = [
+        a.lower().strip() for a in [question.answer] + question.aliases
+    ]
     answer = answer.lower().strip()
 
     return answer in valid_answers

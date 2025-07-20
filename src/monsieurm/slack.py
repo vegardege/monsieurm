@@ -1,9 +1,12 @@
 from slack_sdk import WebClient
 
+# This Slack channel needs to be available in the Workspace the bot was
+# installed for. It could be an env var if we were picky, but if you're
+# actually using this script, you're probably forking it anyway.
 CHANNEL = "#dagens-quiz"
 
 
-def generate_message(theme: str, emojis: str, reaction: str) -> str:
+def generate_slack_message(theme: str, emojis: str, reaction: str) -> str:
     """Generate a Slack message we can print or post.
 
     Args:
@@ -17,7 +20,7 @@ def generate_message(theme: str, emojis: str, reaction: str) -> str:
     return f"{reaction}\n\n{emojis}\nDagens tema: {theme}"
 
 
-def post_message(message: str, slack_token: str) -> None:
+def post_slack_message(message: str, slack_token: str) -> None:
     """Post a message to the configured Slack channel.
 
     Args:
