@@ -1,12 +1,13 @@
-import os
 from datetime import date, datetime
 from typing import Annotated, Optional
 
 import typer
 from rich import print
 
+from monsieurm.config import load_config
 from monsieurm.llm import answer_question, reaction_from_score
 from monsieurm.quiz import get_quiz, is_correct
+from monsieurm.slack import generate_message, post_message
 
 app = typer.Typer()
 
@@ -14,9 +15,10 @@ app = typer.Typer()
 @app.command()
 def solve(
     date_string: Annotated[str, typer.Argument()] = date.today().strftime("%Y-%m-%d"),
+    post_slack: bool = typer.Option(False, "--post-slack", help="Post result to Slack"),
 ) -> None:
     """Solve the quiz and output the results."""
-    api_key = _load_api_key()
+    config = load_config()
     quiz_date = _parse_quiz_date(date_string)
 
     score = 0
@@ -25,7 +27,7 @@ def solve(
     if quiz := get_quiz(quiz_date):
         for q in quiz.questions:
             question = q.question
-            answer = answer_question(question, api_key)
+            answer = answer_question(question, config.mistral_api_key)
 
             if is_correct(q, answer):
                 score += 1
@@ -33,10 +35,13 @@ def solve(
             else:
                 emojis += "🟥"
 
-        reaction = reaction_from_score(score, api_key)
-        print(reaction)
-        print()
-        print(emojis)
+        reaction = reaction_from_score(score, config.mistral_api_key)
+        message = generate_message(quiz.theme, emojis, reaction)
+
+        if post_slack and config.slack_bot_token:
+            post_message(message, config.slack_bot_token)
+        else:
+            print(message)
     else:
         print(f"No quiz published on {quiz_date.strftime('%Y-%m-%d')}")
 
@@ -45,11 +50,8 @@ def solve(
 def display(
     date_string: Annotated[str, typer.Argument()] = date.today().strftime("%Y-%m-%d"),
 ) -> None:
-    """Display the quiz for a specific date with LLM answers.
-
-    Warning: Calling this endpoint will give you spoilers.
-    """
-    api_key = _load_api_key()
+    """Display the quiz for a specific date with LLM answers."""
+    config = load_config()
     quiz_date = _parse_quiz_date(date_string)
 
     if quiz := get_quiz(quiz_date):
@@ -60,7 +62,7 @@ def display(
 
         for ix, q in enumerate(quiz.questions, start=1):
             question = q.question
-            answer = answer_question(question, api_key)
+            answer = answer_question(question, config.mistral_api_key)
             correct = is_correct(q, answer)
             emoji = "🟩" if correct else "🟥"
 
@@ -69,19 +71,6 @@ def display(
             print(f"{emoji} {answer}")
     else:
         print(f"No quiz published on {quiz_date.strftime('%Y-%m-%d')}")
-
-
-def _load_api_key() -> str:
-    """Load the API key from the environment variables.
-
-    Returns:
-        API key if found.
-    """
-    try:
-        return os.environ["MONSIEURM_API_KEY"]
-    except:
-        print("❌ Error: Required environment variable 'MONSIEURM_API_KEY' is not set.")
-        raise typer.Exit(code=1)
 
 
 def _parse_quiz_date(input: Optional[str]) -> date:
