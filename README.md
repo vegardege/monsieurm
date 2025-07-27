@@ -1,12 +1,13 @@
 # Monsieur Mistral
 
-![Monsieur Mistral](https://raw.githubusercontent.com/vegardege/monsieurm/refs/heads/main/assets/monsieurm.png?raw=true)
-
 An AI participant in the Norwegian daily quiz
 [Fem Kjappe](https://www.femkjappe.no/).
 
-The bot uses Mistral's API to answer the daily questions, and posts scores
-and a reaction to our internal Slack channel.
+The bot uses Mistral's API to answer five daily questions, check his own
+results, then posts his scores and a reaction to our dedicated quiz
+Slack channel:
+
+![Slack screenshot](https://raw.githubusercontent.com/vegardege/monsieurm/refs/heads/main/assets/screenshot.png?raw=true)
 
 The script was built for internal use at
 [Zerolytics](https://www.zerolytics.com), and was not designed for external
@@ -14,43 +15,59 @@ reuse or distribution. Open source in the spirit of sharing and learning.
 
 ## Installation
 
-You almost certainly need to change a few things if you want to set this up
-in a different context than ours.
+> [!NOTE]
+> You almost certainly need to change a few things in the code if you want
+> to run this in a different setting. This guide assumes you're deploying
+> the bot internally at Zerolytics.
 
-The easiest way to get the script running is by using `poetry` with a couple
-of secret env vars:
+The easiest way to get started is with [Poetry](https://python-poetry.org/):
 
-1. Install [poetry](https://python-poetry.org/docs/#installation)
-2. Get an API key from Mistral and set it to `MONSIEURM_MISTRAL_API_KEY`
-   in your environment.
-3. If you want to post scores and reactions to a Slack channel, create a Slack
-   bot in your workspace, generate a token for it (`chat:write` and
-   `chat:write.public` required permissions) and set the token to
-   `MONSIEURM_SLACK_TOKEN`.
-4. Execute `poetry install`
-5. For each run, execute `poetry run monsieurm`
+### Prerequisites
+
+1. **Install Poetry**  
+   Follow the instructions at
+   [python-poetry.org/docs/#installation](https://python-poetry.org/docs/#installation).
+
+2. **Set Environment Variables**
+   - Get an API key from [Mistral](https://mistral.ai/) and set it:
+     ```bash
+     export MONSIEURM_MISTRAL_API_KEY=<your_mistral_api_key>
+     ```
+   - (Optional) To post scores and reactions to Slack:
+     - Create a [Slack bot](https://api.slack.com/apps/) in your workspace.
+     - Grant it the following permissions: `chat:write` and `chat:write.public`.
+     - Set your bot token:
+       ```bash
+       export MONSIEURM_SLACK_TOKEN=<your_slack_token>
+       ```
+
+### Install Dependencies
+
+```bash
+poetry install
+```
 
 ## Usage
 
-The tool should be run once per week day using:
+Run the tool once per weekday with:
 
 ```bash
 poetry run monsieurm solve --post-slack
 ```
 
-You can also specify a date to solve and publish previous quiz:
+To solve and publish a past quiz for a specific date:
 
 ```bash
 poetry run monsieurm solve 2025-07-18
 ```
 
-If you want to see the answers, run:
+To view answers:
 
 ```bash
 poetry run monsieurm display
 ```
 
-Again with an optional date.
+You can also provide a date to display results for a past quiz.
 
 > [!WARNING]
 > The output of `display` will contain spoilers to the quiz when the LLM gets
