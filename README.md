@@ -20,51 +20,55 @@ reuse or distribution. Open source in the spirit of sharing and learning.
 > to run this in a different setting. This guide assumes you're deploying
 > the bot internally at Zerolytics.
 
-The easiest way to get started is with [Poetry](https://python-poetry.org/):
+`monsieurm` needs a [Mistral](https://mistral.ai/) API token to run. If you
+want to post updates to [Slack bot](https://api.slack.com/apps/), you need
+a Slack token as well, but this is optional.
 
-### Prerequisites
+The easiest way to get started is by using [docker](https://docker.com):
+
+```bash
+docker build -t monsieurm:latest .
+cp .env.template .env # Add your secrets to the .env file
+docker run --rm -it --env-file .env monsieurm display 2025-08-01
+```
+
+If you want to use [Poetry](https://python-poetry.org/) directly:
 
 1. **Install Poetry**  
    Follow the instructions at
    [python-poetry.org/docs/#installation](https://python-poetry.org/docs/#installation).
 
 2. **Set Environment Variables**
-   - Get an API key from [Mistral](https://mistral.ai/) and set it:
-     ```bash
-     export MONSIEURM_MISTRAL_API_KEY=<your_mistral_api_key>
-     ```
-   - (Optional) To post scores and reactions to Slack:
-     - Create a [Slack bot](https://api.slack.com/apps/) in your workspace.
-     - Grant it the following permissions: `chat:write` and `chat:write.public`.
-     - Set your bot token:
-       ```bash
-       export MONSIEURM_SLACK_TOKEN=<your_slack_token>
-       ```
 
-### Install Dependencies
+   ```bash
+   export MONSIEURM_MISTRAL_API_KEY=<your_mistral_api_key>
+   export MONSIEURM_SLACK_TOKEN=<your_slack_token>
+   ```
 
-```bash
-poetry install
-```
+3. Install Dependencies
+
+   ```bash
+   poetry install
+   ```
+
+4. Run tool:
+
+   ```bash
+   poetry run monsieurm solve --post-slack
+   ```
 
 ## Usage
-
-Run the tool once per weekday with:
-
-```bash
-poetry run monsieurm solve --post-slack
-```
 
 To solve and publish a past quiz for a specific date:
 
 ```bash
-poetry run monsieurm solve 2025-07-18
+monsieurm solve 2025-07-18
 ```
 
 To view answers:
 
 ```bash
-poetry run monsieurm display
+monsieurm display
 ```
 
 You can also provide a date to display results for a past quiz.

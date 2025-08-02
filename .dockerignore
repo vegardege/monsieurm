@@ -1,0 +1,2 @@
+# Provide the secrets file with `--env-file` at run time
+.env
