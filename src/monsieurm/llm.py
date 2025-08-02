@@ -1,9 +1,14 @@
+import random
 import time
 from typing import Optional
 
 import requests
 
-from monsieurm.prompts import QUESTION_PROMPT, REACTION_PROMPT
+from monsieurm.prompts import (
+    QUESTION_PROMPT,
+    REACTION_PROMPT,
+    REACTION_VARIATION,
+)
 
 ROOT_URL = "https://api.mistral.ai"
 
@@ -32,8 +37,9 @@ def reaction_from_score(score: int, api_key: str) -> str:
         question (str): Question from the quiz.
         api_key (str): Bearer token provided by Mistral after signup.
     """
+    variation = random.choice(REACTION_VARIATION)
     return _chat_completion(
-        REACTION_PROMPT.format(score=score),
+        REACTION_PROMPT.format(score=score, variation=variation),
         api_key,
         temperature=1.0,
     )
