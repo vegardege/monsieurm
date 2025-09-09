@@ -30,16 +30,17 @@ def answer_question(question: str, api_key: str) -> str:
     )
 
 
-def reaction_from_score(score: int, api_key: str) -> str:
+def reaction_from_score(score: int, theme: str, api_key: str) -> str:
     """Ask a quiz question to the LLM and get a response.
 
     Args:
-        question (str): Question from the quiz.
+        score (int): The bot's score out of 5.
+        theme (str): Theme of the daily quiz.
         api_key (str): Bearer token provided by Mistral after signup.
     """
     variation = random.choice(REACTION_VARIATION)
     return _chat_completion(
-        REACTION_PROMPT.format(score=score, variation=variation),
+        REACTION_PROMPT.format(score=score, variation=variation, theme=theme),
         api_key,
         temperature=1.0,
     )

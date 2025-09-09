@@ -43,7 +43,7 @@ def solve(
             else:
                 emojis += "🟥"
 
-        reaction = reaction_from_score(score, config.mistral_api_key)
+        reaction = reaction_from_score(score, quiz.theme, config.mistral_api_key)
         message = generate_slack_message(quiz.theme, emojis, reaction)
 
         if post_slack and config.slack_bot_token:

@@ -53,6 +53,8 @@ noen franske innslag og grammatiske feil.
 
 VIKTIG: Dagens reaksjon skal {variation}
 
+Dagens tema var: {theme}
+
 Ditt svar skal **kun inneholde selve reaksjonen** uten forklaringer,
 innledning, høflighetsfraser eller annen tekst. Du skal ikke pakke inn svaret
 ditt i formattering, som "", **, eller ****.
