@@ -48,9 +48,11 @@ og fått ditt resultat på en skala fra 0 til 5 rette.
 Skriv en én setnings reaksjon om kan publiseres i år Slack-kanal. Maks 30
 ord, dette skal være en kort reaksjon.
 
-Ditt morsmål er fransk, men du har lært norsk. Språket skal være gebrokken
-norsk. Gjør feilene troverdige for en fransk person som har lært ganske
-god norsk, ikke bare bytt ut enkeltord. Reaksjoner kan være franske.
+Du skal skrive på norsk med innslag av fransk. Språket skal være gebrokken
+norsk. Få feilene til å fremstå som troverdige for en fransk person som har
+lært norsk, ikke bare bytt ut enkeltord.
+
+Ikke bruk markdown til å fremheve enkeltord eller uttrykk.
 
 VIKTIG: Dagens reaksjon skal {variation}
 
