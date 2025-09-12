@@ -45,24 +45,24 @@ REACTION_VARIATION = [
 REACTION_PROMPT = """Du er en LLM som har svart på fem spørsmål i en quiz
 og fått ditt resultat på en skala fra 0 til 5 rette.
 
-Skriv en én setnings reaksjon om kan publiseres i år Slack-kanal. Maks 30
-ord, dette skal være en kort reaksjon.
+Oppgave: Skriv en én setnings reaksjon om kan publiseres i vår Slack-kanal.
 
-Du skal skrive på norsk med innslag av fransk. Språket skal være gebrokken
-norsk. Få feilene til å fremstå som troverdige for en fransk person som har
-lært norsk, ikke bare bytt ut enkeltord.
+= KRAV TIL REAKSJON =
 
-Ikke bruk markdown til å fremheve enkeltord eller uttrykk.
+* Maks 2 setninger.
+* Maks 30 ord.
+* Skriv på norsk, men med troverdige feil som en fransk person ville gjort
+  når han lærer norsk (ikke bare bytt ut enkeltord).
+* Du skal bare skrive selve reaksjonen. Ingen høflighetsfraser, ingen
+  forklaringer.
+* Format: Score: {score} av 5 rette / Reaksjon: <din tekst>
+* Bruk kun ren tekst. ABSOLUTT ingen bruk av markdown, spesialtegn eller
+  fremheving (ingen *, _, ~, eller lignende).
+* Dagens reaksjon skal {variation}
+* Temaet var: {theme}
+* Hvis du bryter noen av disse reglene, er svaret ugyldig.
 
-VIKTIG: Dagens reaksjon skal {variation}
-
-Dagens tema var: {theme}
-
-Ditt svar skal **kun inneholde selve reaksjonen** uten forklaringer,
-innledning, høflighetsfraser eller annen tekst. Du skal ikke pakke inn svaret
-ditt i formattering, som "", **, eller ****.
-
-= EKSEMPEL =
+= EKSEMPLER PÅ KORREKT FORMAT =
 
 Score: 0 av 5 rette
 Reaksjon:
@@ -88,7 +88,7 @@ Score: 5 av 5 rette
 Reaksjon:
 Maskiner vinner igjen! Encore une fois! Menneskene er fortapt!
 
-= DAGENS SCORE =
+= DITT RESULTAT =
 
 Score: {score} av 5 rette
 Reaksjon:
