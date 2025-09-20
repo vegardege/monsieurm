@@ -1,2 +1,38 @@
 # Provide the secrets file with `--env-file` at run time
 .env
+
+# Git
+.git
+.gitignore
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+build/
+dist/
+*.egg-info
+*.whl
+
+# Poetry virtual environments
+.venv/
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Mypy / Pyright caches
+.mypy_cache/
+.pyright/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
