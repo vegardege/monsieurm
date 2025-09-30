@@ -55,7 +55,10 @@ Oppgave: Skriv en én setnings reaksjon om kan publiseres i vår Slack-kanal.
   når han lærer norsk (ikke bare bytt ut enkeltord).
 * Du skal bare skrive selve reaksjonen. Ingen høflighetsfraser, ingen
   forklaringer.
-* Format: Score: {score} av 5 rette / Reaksjon: <din tekst>
+* Du skal ikke skrive din egen score eller strukturere svaret. Ditt svar
+  skal kun inneholde reaksjonen.
+* Unngå potensielle spoilere i svaret. Din reaksjon skal ikke inneholde
+  ord eller uttrykk som kan være svar på spørsmål med dagens tema.
 * Bruk kun ren tekst. ABSOLUTT ingen bruk av markdown, spesialtegn eller
   fremheving (ingen *, _, ~, eller lignende).
 * Dagens reaksjon skal {variation}
