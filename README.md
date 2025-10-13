@@ -86,3 +86,19 @@ You can also provide a date to display results for a past quiz.
 Because human participants aren't allowed to use any help, Mistral is of
 course _not_ given any tools or the option to search. This is man vs
 machine at its most honest and brutal.
+
+## Formatting and Type Checking
+
+The project uses [Ruff](https://astral.sh/ruff) for formatting:
+
+```bash
+uv run ruff check
+All checks passed!
+```
+
+and [ty](https://docs.astral.sh/ty/) for type checking:
+
+```bash
+uv run ty check
+All checks passed!
+```
