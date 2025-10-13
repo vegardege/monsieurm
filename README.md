@@ -32,11 +32,11 @@ cp .env.template .env # Add your secrets to the .env file
 docker run --rm -it --env-file .env monsieurm display 2025-08-01
 ```
 
-If you want to use [Poetry](https://python-poetry.org/) directly:
+If you want to use [uv](https://docs.astral.sh/uv/) directly:
 
-1. **Install Poetry**  
+1. **Install uv**
    Follow the instructions at
-   [python-poetry.org/docs/#installation](https://python-poetry.org/docs/#installation).
+   [https://docs.astral.sh/uv/getting-started/installation/](https://docs.astral.sh/uv/getting-started/installation/).
 
 2. **Set Environment Variables**
 
@@ -48,13 +48,19 @@ If you want to use [Poetry](https://python-poetry.org/) directly:
 3. Install Dependencies
 
    ```bash
-   poetry install
+   uv sync
    ```
 
 4. Run tool:
 
    ```bash
-   poetry run monsieurm solve --post-slack
+   uv run monsieurm solve --post-slack
+   ```
+
+   If `.venv/bin` or your uv environment is in your PATH, you can run the CLI directly:
+
+   ```bash
+   monsieurm solve --post-slack
    ```
 
 ## Usage
