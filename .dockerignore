@@ -17,7 +17,7 @@ dist/
 *.egg-info
 *.whl
 
-# Poetry virtual environments
+# Virtual environments
 .venv/
 
 # IDE/editor configs
