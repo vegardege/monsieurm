@@ -4,7 +4,6 @@ WORKDIR /app
 
 # Setup the base system with `poetry`
 RUN apt-get update \
-    && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
@@ -19,11 +18,6 @@ COPY pyproject.toml poetry.lock README.md ./
 COPY src/ src/
 RUN poetry install --no-interaction --no-ansi --without dev
 
-# Add entrypoint script to load .env then exec your CLI
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-# 10. Default workdir & entrypoint
-WORKDIR /app
-ENTRYPOINT ["docker-entrypoint.sh"]
+# Add entrypoint
+ENTRYPOINT ["poetry", "run", "monsieurm"]
 CMD ["display"]
