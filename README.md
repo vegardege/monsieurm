@@ -1,5 +1,7 @@
 # Monsieur Mistral
 
+![Test, Build, Deploy](https://github.com/vegardege/monsieurm/actions/workflows/test-build-deploy.yml/badge.svg)
+
 An AI participant in the Norwegian daily quiz
 [Fem Kjappe](https://www.femkjappe.no/).
 
